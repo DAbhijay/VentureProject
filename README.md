@@ -29,3 +29,6 @@ MERN + Python asynchronous task processing platform with Docker, Kubernetes, Arg
 
 ## Argo CD Dashboard
 ![Argo CD Dashboard](argocd-screenshot.png)
+
+> Note: Infrastructure manifests are located in the `/infra` directory of this repository.
+> In a production setup this would be a separate repository for GitOps separation of concerns.
