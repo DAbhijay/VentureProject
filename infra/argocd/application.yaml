@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/ai-task-platform-infra.git
+    repoURL: https://github.com/DAbhijay/VentureProject.git
     targetRevision: main
-    path: k8s
+    path: infra/k8s
   destination:
     server: https://kubernetes.default.svc
     namespace: ai-task-platform

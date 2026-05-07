@@ -1,5 +1,5 @@
 version: '3.9'
- 
+
 services:
   mongodb:
     image: mongo:7
@@ -13,7 +13,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
- 
+
   redis:
     image: redis:7-alpine
     ports:
@@ -24,7 +24,7 @@ services:
       timeout: 3s
       retries: 5
       start_period: 5s
- 
+
   backend:
     build: ./backend
     env_file: ./backend/.env
@@ -35,7 +35,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
- 
+
   worker:
     build: ./worker
     env_file: ./worker/.env
@@ -44,7 +44,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
- 
+
   frontend:
     build: ./frontend
     env_file: ./frontend/.env
@@ -52,7 +52,6 @@ services:
       - '5173:80'
     depends_on:
       - backend
- 
+
 volumes:
   mongodb_data:
- 

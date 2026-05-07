@@ -26,3 +26,6 @@ MERN + Python asynchronous task processing platform with Docker, Kubernetes, Arg
 ## Kubernetes + Argo CD
 - Apply manifests under infra/k8s.
 - Configure and apply infra/argocd/application.yaml.
+
+## Argo CD Dashboard
+![Argo CD Dashboard](argocd-screenshot.png)
