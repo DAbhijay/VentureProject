@@ -1,0 +1,41 @@
+name: worker-ci
+
+on:
+  push:
+    paths:
+      - 'worker/**'
+      - '.github/workflows/worker-ci.yml'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+        working-directory: worker
+      - run: python -m compileall worker.py
+        working-directory: worker
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./worker
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-task-worker:${{ github.sha }}
+      - name: Update infra image tag
+        env:
+          GH_TOKEN: ${{ secrets.INFRA_REPO_TOKEN }}
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/your-org/ai-task-platform-infra.git infra-repo
+          sed -i "s|ai-task-worker:.*|ai-task-worker:${GITHUB_SHA}|" infra-repo/k8s/worker.yaml
+          cd infra-repo
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git add k8s/worker.yaml
+          git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "chore: update worker image ${GITHUB_SHA}" || true
+          git push
